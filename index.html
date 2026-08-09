@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Site officiel de La Marque WM — World Is Mine.">
+  <title>La Marque WM — World Is Mine</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="La Marque WM">
+      <span class="brand-mark">WM</span>
+      <span class="brand-name">LA MARQUE WM</span>
+    </a>
+    <nav>
+      <a href="#shop">SHOP</a>
+      <a href="#about">À PROPOS</a>
+      <a href="#contact">CONTACT</a>
+      <button id="cartButton" class="cart-btn">PANIER <span id="cartCount">0</span></button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">WORLD IS MINE</p>
+        <h1>LA MARQUE WM</h1>
+        <p class="hero-copy">Des créations originales, dessinées avec une identité propre.</p>
+        <a class="cta" href="#shop">DÉCOUVRIR LA COLLECTION</a>
+      </div>
+    </section>
+
+    <section id="shop" class="section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">COLLECTION</p>
+          <h2>Nos pièces</h2>
+        </div>
+        <p class="stock-note">Stock synchronisé depuis l’inventaire Shopify sauvegardé le 09/08/2026.</p>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section id="about" class="about section">
+      <div class="about-copy">
+        <p class="eyebrow">DEPUIS 2020</p>
+        <h2>Une marque française, une identité.</h2>
+        <p>La Marque WM est née de créations d’abord imaginées pour notre propre garde-robe, puis développées pour être partagées. Les logos et imprimés sont au cœur de l’identité de la marque.</p>
+        <p>Les vêtements sont mixtes et les créations sont pensées pour proposer une alternative personnelle aux codes déjà vus partout.</p>
+      </div>
+      <div class="about-panel">
+        <span>WM</span>
+        <small>WORLD IS MINE</small>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section">
+      <p class="eyebrow">CONTACT</p>
+      <h2>Une question ?</h2>
+      <p>Écris-nous à <a href="mailto:lamarquewm@gmail.com">lamarquewm@gmail.com</a></p>
+      <p>Instagram : <strong>@lamarquewm</strong></p>
+    </section>
+  </main>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-head">
+      <h2>Panier</h2>
+      <button id="closeCart" aria-label="Fermer">×</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
+      <button class="checkout" disabled>PAIEMENT — À CONNECTER À STRIPE</button>
+      <p class="checkout-note">Prototype : le panier fonctionne, le paiement sera activé à l’étape Stripe.</p>
+    </div>
+  </aside>
+  <div id="overlay" class="overlay"></div>
+
+  <footer>
+    <span>© 2026 LA MARQUE WM</span>
+    <span>WORLD IS MINE</span>
+  </footer>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
