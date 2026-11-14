@@ -29,6 +29,26 @@ function errorResponse(message, status = 400) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === "/api/db-status") {
+  try {
+    if (!env.DB) {
+      return errorResponse("Base de données non connectée", 503);
+    }
+
+    const result = await env.DB.prepare(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('orders', 'order_items', 'inventory')"
+    ).all();
+
+    return Response.json({
+      ok: true,
+      database: true,
+      tables: result.results.map(row => row.name)
+    });
+  } catch (error) {
+    console.error("Erreur D1", error);
+    return errorResponse("Erreur de connexion à la base", 500);
+  }
+}
 
     if (url.pathname === "/api/health") {
       return Response.json({
