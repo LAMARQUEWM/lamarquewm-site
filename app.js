@@ -45,3 +45,35 @@ document.getElementById('cartButton').addEventListener('click',openCart);
 document.getElementById('closeCart').addEventListener('click',closeCart);
 overlay.addEventListener('click',closeCart);
 renderProducts(); renderCart();
+
+async function checkout() {
+  if (cart.length === 0) {
+    alert("Ton panier est vide.");
+    return;
+  }
+
+  const button = document.getElementById("checkoutButton");
+  button.disabled = true;
+
+  try {
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: cart })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.url) {
+      throw new Error(data.error || "Erreur de paiement");
+    }
+
+    window.location.href = data.url;
+  } catch (error) {
+    alert("Impossible de lancer le paiement : " + error.message);
+    button.disabled = false;
+  }
+}
+
+document.getElementById("checkoutButton")
+  .addEventListener("click", checkout);
