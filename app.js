@@ -254,3 +254,22 @@ document.getElementById("checkoutButton")
 
 renderProducts();
 renderCart();
+
+const paymentParams = new URLSearchParams(window.location.search);
+
+if (
+  paymentParams.get("payment") === "success" &&
+  paymentParams.get("session_id")
+) {
+  cart = [];
+  save();
+  closeCart();
+
+  alert("Merci pour ta commande ! Ton paiement est en cours de confirmation.");
+
+  window.history.replaceState(
+    {},
+    "",
+    window.location.pathname + window.location.hash
+  );
+}
