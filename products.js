@@ -510,3 +510,25 @@ const PRODUCTS = [
     ]
   }
 ];
+
+
+const IMAGES_WM = {
+  "sweat-a-capuche-sad-cloud": "sweatsadcloud.webp",
+  "bonnet": "IMG-0558.webp",
+  "bonnet-a-pompon": "IMG-0173.webp",
+  "polo-wm": "IMG-0149.webp",
+  "sweat-a-capuche-big-wm": "IMG-0161.webp",
+  "t-shirt-makichta": "IMG-0192.webp",
+  "t-shirt-heart-break": "IMG-0404.webp",
+  "t-shirt-sad-cloud": "IMG-0218.webp",
+  "t-shirt-elephun": "IMG-0206.webp",
+  "t-shirt-balhaine": "IMG-0180.webp",
+  "t-shirt-big-wm": "IMG-0129.webp"
+};
+
+PRODUCTS.forEach(product => {
+  if (IMAGES_WM[product.handle]) {
+    product.image = "/" + IMAGES_WM[product.handle];
+  }
+});
+
