@@ -58,59 +58,154 @@ function updateSelection(handle) {
 
 function renderProducts() {
   grid.innerHTML = catalog.map(p => {
-    const variants = variantsOf(p);
-    const totalStock = variants.length
-      ? variants.reduce((sum, v) => sum + Number(v.qty || 0), 0)
-      : Number(p.stock || 0);
-
-    const selector = variants.length ? `
-      <label style="display:block;margin:12px 0">
-        Taille / couleur :
-        <select data-variant-for="${p.handle}"
-          style="display:block;width:100%;padding:12px;margin-top:6px;background:#fff;color:#111">
-          <option value="">Choisir une option</option>
-          ${variants.map((v, i) => `
-            <option value="${i}" ${Number(v.qty) <= 0 ? "disabled" : ""}>
-              ${variantLabel(v)} ${Number(v.qty) <= 0 ? "— Épuisé" : ""}
-            </option>
-          `).join("")}
-        </select>
-      </label>` : "";
-
     return `
       <article class="product">
-        <div class="product-image">
-          <img src="${p.image}" alt="${p.title}" loading="lazy">
-        </div>
-        <div class="product-info">
-          <div class="product-top">
+        <button type="button" class="product-open"
+          data-handle="${p.handle}"
+          style="display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer">
+          <div class="product-image">
+            <img src="${p.image}" alt="${p.title}" loading="lazy">
+          </div>
+          <div class="product-info">
             <h3>${p.title}</h3>
             <span class="price">${euro(p.price)}</span>
           </div>
-          <p class="desc">${p.description || "Création originale La Marque WM."}</p>
-          <span class="availability ${totalStock <= 0 ? "out" : ""}">
-            ${totalStock > 0 ? totalStock + " pièce(s) en stock" : "RUPTURE"}
-          </span>
-          ${selector}
-          <button class="add" data-handle="${p.handle}" disabled>
-            AJOUTER AU PANIER
-          </button>
-        </div>
+        </button>
       </article>`;
   }).join("");
 
-  document.querySelectorAll("[data-variant-for]").forEach(select => {
-    select.addEventListener("change", () => {
-      updateSelection(select.dataset.variantFor);
+  grid.querySelectorAll(".product-open").forEach(button => {
+    button.addEventListener("click", () => {
+      openProduct(button.dataset.handle);
+    });
+  });
+}
+function openProduct(handle) {
+  const p = findProduct(handle);
+  if (!p) return;
+
+  const variants = variantsOf(p);
+  const totalStock = variants.length
+    ? variants.reduce((sum, v) => sum + Number(v.qty || 0), 0)
+    : Number(p.stock || 0);
+
+  const images = [...new Set([
+    p.image,
+    ...(Array.isArray(p.gallery) ? p.gallery : [])
+  ].filter(Boolean))];
+
+  const modal = document.createElement("dialog");
+
+  modal.style.cssText = `
+    width: min(1000px, 94vw);
+    max-height: 90vh;
+    padding: 24px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #333;
+    overflow: auto;
+  `;
+
+  modal.innerHTML = `
+    <button type="button" class="close-product"
+      style="display:block;margin:0 0 18px auto;background:none;color:white;border:0;font-size:28px;cursor:pointer">
+      ×
+    </button>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:30px">
+
+      <div>
+        <img class="main-product-photo"
+          src="${images[0]}"
+          alt="${p.title}"
+          style="width:100%;max-height:550px;object-fit:contain">
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          ${images.map((src, i) => `
+            <button type="button" class="gallery-thumb"
+              data-index="${i}"
+              style="padding:0;border:1px solid #555;background:none;cursor:pointer">
+              <img src="${src}" alt="Photo ${i + 1}"
+                style="width:65px;height:80px;object-fit:cover">
+            </button>
+          `).join("")}
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-size:30px;margin:0 0 15px">
+          ${p.title}
+        </h2>
+
+        <p style="font-size:24px;font-weight:bold">
+          ${euro(p.price)}
+        </p>
+
+        <p style="color:#ccc;line-height:1.7">
+          ${p.description || "Création originale La Marque WM."}
+        </p>
+
+        <p>
+          ${totalStock > 0
+            ? totalStock + " pièce(s) en stock"
+            : "RUPTURE DE STOCK"}
+        </p>
+
+        ${variants.length ? `
+          <label>
+            Taille / couleur :
+            <select data-variant-for="${p.handle}"
+              style="display:block;width:100%;padding:12px;margin:12px 0;background:white;color:black">
+              <option value="">Choisir une option</option>
+              ${variants.map((v, i) => `
+                <option value="${i}"
+                  ${Number(v.qty) <= 0 ? "disabled" : ""}>
+                  ${variantLabel(v)}
+                  ${Number(v.qty) <= 0 ? " - Épuisé" : ""}
+                </option>
+              `).join("")}
+            </select>
+          </label>
+        ` : ""}
+
+        <button type="button" class="add"
+          data-handle="${p.handle}" disabled>
+          AJOUTER AU PANIER
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener("close", () => modal.remove());
+
+  modal.querySelector(".close-product")
+    .addEventListener("click", () => modal.close());
+
+  modal.querySelectorAll(".gallery-thumb").forEach(button => {
+    button.addEventListener("click", () => {
+      modal.querySelector(".main-product-photo").src =
+        images[Number(button.dataset.index)];
     });
   });
 
-  document.querySelectorAll(".add").forEach(button => {
-    button.addEventListener("click", () => addToCart(button.dataset.handle));
-    updateSelection(button.dataset.handle);
-  });
-}
+  const select = modal.querySelector("select");
 
+  if (select) {
+    select.addEventListener("change", () => {
+      updateSelection(handle);
+    });
+  }
+
+  modal.querySelector(".add").addEventListener("click", () => {
+    addToCart(handle);
+    modal.close();
+  });
+
+  modal.showModal();
+  updateSelection(handle);
+}
 function addToCart(handle) {
   const p = findProduct(handle);
   if (!p) return;
