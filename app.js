@@ -151,22 +151,26 @@ function openProduct(handle) {
             : "RUPTURE DE STOCK"}
         </p>
 
-        ${variants.length ? `
-          <label>
-            Taille / couleur :
-            <select data-variant-for="${p.handle}"
-              style="display:block;width:100%;padding:12px;margin:12px 0;background:white;color:black">
-              <option value="">Choisir une option</option>
-              ${variants.map((v, i) => `
-                <option value="${i}"
-                  ${Number(v.qty) <= 0 ? "disabled" : ""}>
-                  ${variantLabel(v)}
-                  ${Number(v.qty) <= 0 ? " - Épuisé" : ""}
-                </option>
-              `).join("")}
-            </select>
-          </label>
-        ` : ""}
+       ${variants.length ? `
+  <div class="variant-picker" style="margin:20px 0">
+
+    <div class="color-picker"></div>
+
+    <div class="size-picker"></div>
+
+    <select data-variant-for="${p.handle}"
+      style="display:none">
+      <option value="">Choisir une option</option>
+      ${variants.map((v, i) => `
+        <option value="${i}"
+          ${Number(v.qty) <= 0 ? "disabled" : ""}>
+          ${variantLabel(v)}
+        </option>
+      `).join("")}
+    </select>
+
+  </div>
+` : ""}
 
         <button type="button" class="add"
           data-handle="${p.handle}" disabled>
@@ -190,7 +194,7 @@ function openProduct(handle) {
     });
   });
 
-  const select = modal.querySelector("select");
+ const select = modal.querySelector("select");
 
 const colorPhotos = {
   "sweat-a-capuche-big-wm": {
@@ -201,19 +205,99 @@ const colorPhotos = {
 };
 
 if (select) {
-  select.addEventListener("change", () => {
+  const colorPicker = modal.querySelector(".color-picker");
+  const sizePicker = modal.querySelector(".size-picker");
+
+  const colors = [...new Set(variants.map(v => v.Couleur).filter(Boolean))];
+  const sizes = [...new Set(variants.map(v => v.Taille).filter(Boolean))];
+
+  let selectedColor = "";
+  let selectedSize = "";
+
+  const colorCodes = {
+    "Blanc": "#ffffff",
+    "Noir": "#000000",
+    "Rouge": "#c8102e",
+    "Gris": "#808080",
+    "Bleu": "#2457a7"
+  };
+
+  function refreshPickers() {
+    colorPicker.innerHTML = colors.length ? `
+      <p style="margin-bottom:10px">Couleur : ${selectedColor}</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${colors.map(color => `
+          <button type="button" data-color="${color}"
+            title="${color}" aria-label="${color}"
+            style="width:36px;height:36px;border-radius:50%;
+            background:${colorCodes[color] || "#999"};
+            border:2px solid #777;
+            outline:${selectedColor === color ? "2px solid white" : "none"};
+            outline-offset:3px;cursor:pointer">
+          </button>
+        `).join("")}
+      </div>
+    ` : "";
+
+    sizePicker.innerHTML = sizes.length ? `
+      <p style="margin:20px 0 10px">Taille :</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${sizes.map(size => {
+          const available = variants.some(v =>
+            v.Taille === size &&
+            (!selectedColor || v.Couleur === selectedColor) &&
+            Number(v.qty) > 0
+          );
+
+          return `
+            <button type="button" data-size="${size}"
+              ${available ? "" : "disabled"}
+              style="min-width:45px;padding:12px;
+              border:1px solid #777;
+              background:${selectedSize === size ? "white" : "#171717"};
+              color:${selectedSize === size ? "black" : "white"};
+              opacity:${available ? "1" : "0.3"};
+              cursor:${available ? "pointer" : "not-allowed"}">
+              ${size}
+            </button>
+          `;
+        }).join("")}
+      </div>
+    ` : "";
+
+    const index = variants.findIndex(v =>
+      (!colors.length || v.Couleur === selectedColor) &&
+      (!sizes.length || v.Taille === selectedSize) &&
+      Number(v.qty) > 0
+    );
+
+    select.value = index >= 0 ? String(index) : "";
     updateSelection(handle);
 
-    if (select.value === "") return;
+    colorPicker.querySelectorAll("[data-color]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedColor = button.dataset.color;
+        selectedSize = "";
 
-    const variant = variants[Number(select.value)];
-    const color = variant?.Couleur;
-    const photo = colorPhotos[handle]?.[color];
+        const photo = colorPhotos[handle]?.[selectedColor];
 
-    if (photo) {
-      modal.querySelector(".main-product-photo").src = photo;
-    }
-  });
+        if (photo) {
+          modal.querySelector(".main-product-photo").src = photo;
+        }
+
+        refreshPickers();
+      });
+    });
+
+    sizePicker.querySelectorAll("[data-size]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedSize = button.dataset.size;
+        refreshPickers();
+      });
+    });
+  }
+
+  refreshPickers();
 }
 
   modal.querySelector(".add").addEventListener("click", () => {
