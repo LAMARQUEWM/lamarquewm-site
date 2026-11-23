@@ -192,11 +192,29 @@ function openProduct(handle) {
 
   const select = modal.querySelector("select");
 
-  if (select) {
-    select.addEventListener("change", () => {
-      updateSelection(handle);
-    });
+const colorPhotos = {
+  "sweat-a-capuche-big-wm": {
+    "Blanc": "/IMG-0086.webp",
+    "Rouge": "/IMG-0088.webp",
+    "Noir": "/IMG-0091.webp"
   }
+};
+
+if (select) {
+  select.addEventListener("change", () => {
+    updateSelection(handle);
+
+    if (select.value === "") return;
+
+    const variant = variants[Number(select.value)];
+    const color = variant?.Couleur;
+    const photo = colorPhotos[handle]?.[color];
+
+    if (photo) {
+      modal.querySelector(".main-product-photo").src = photo;
+    }
+  });
+}
 
   modal.querySelector(".add").addEventListener("click", () => {
     addToCart(handle);
