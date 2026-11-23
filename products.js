@@ -532,3 +532,88 @@ PRODUCTS.forEach(product => {
   }
 });
 
+const GALERIES_WM = {
+  "sweat-a-capuche-sad-cloud": [
+    "sweatsadcloud.webp"
+  ],
+  "bonnet": [
+    "IMG-0558.webp",
+    "IMG-0169.webp",
+    "IMG-0189.webp",
+    "IMG-0190.webp",
+    "IMG-0445.webp",
+    "IMG-0506.webp",
+    "IMG-0642.webp"
+  ],
+  "bonnet-a-pompon": [
+    "IMG-0154.webp",
+    "IMG-0156.webp"
+  ],
+  "polo-wm": [
+    "IMG-0149.webp",
+    "IMG-0146.webp",
+    "IMG-0148.webp",
+    "IMG-0157.webp"
+  ],
+  "sweat-a-capuche-big-wm": [
+    "IMG-0161.webp",
+    "IMG-0042.webp",
+    "IMG-0043.webp",
+    "IMG-0047.webp",
+    "IMG-0053.webp",
+    "IMG-0055.webp",
+    "IMG-0059.webp",
+    "IMG-0065.webp",
+    "IMG-0074.webp",
+    "IMG-0086.webp",
+    "IMG-0087.webp",
+    "IMG-0088.webp",
+    "IMG-0089.webp",
+    "IMG-0090.webp",
+    "IMG-0091.webp",
+    "IMG-0099.webp",
+    "IMG-0103.webp",
+    "IMG-0107.webp",
+    "IMG-0159.webp",
+    "IMG-0160.webp"
+  ],
+  "t-shirt-makichita": [
+    "IMG-0192.webp",
+    "IMG-0194.webp",
+    "IMG-0196.webp",
+    "IMG-0197.webp"
+  ],
+  "t-shirt-heart-break": [
+    "IMG-0404.webp",
+    "IMG-0177.webp",
+    "IMG-0179.webp",
+    "IMG-0216.webp"
+  ],
+  "t-shirt-sad-cloud": [
+    "IMG-0218.webp",
+    "IMG-0221.webp"
+  ],
+  "t-shirt-elephun": [
+    "IMG-0206.webp",
+    "IMG-0222.webp"
+  ],
+  "t-shirt-balhaine": [
+    "IMG-0180.webp",
+    "IMG-0181.webp",
+    "IMG-0220.webp"
+  ],
+  "t-shirt-big-wm": [
+    "IMG-0129.webp",
+    "IMG-0094.webp",
+    "IMG-0097.webp",
+    "IMG-0173.webp"
+  ]
+};
+
+PRODUCTS.forEach(product => {
+  const photos = GALERIES_WM[product.handle];
+  if (photos && photos.length) {
+    product.image = "/" + photos[0];
+    product.gallery = photos.map(photo => "/" + photo);
+  }
+});
