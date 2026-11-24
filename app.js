@@ -201,9 +201,11 @@ const colorPhotos = {
     "Blanc": "/IMG-0086.webp",
     "Rouge": "/IMG-0088.webp",
     "Noir": "/IMG-0091.webp"
+  },
+  "bonnet-a-pompon": {
+    "Gris": "/IMG-0169.webp"
   }
 };
-
 if (select) {
   const colorPicker = modal.querySelector(".color-picker");
   const sizePicker = modal.querySelector(".size-picker");
