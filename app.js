@@ -264,9 +264,7 @@ return Object.entries(sections)
   .map(([title, content]) => `
     <details class="wm-description-section">
       <summary>${title}</summary>
-      <div class="wm-description-content" style="white-space:pre-line">
-        ${formatSectionWM(title, content)}
-      </div>
+      <div class="wm-description-content" style="white-space:pre-line">${formatSectionWM(title, content).trim()}</div>
     </details>
   `).join("");
             })()}
