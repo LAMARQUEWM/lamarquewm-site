@@ -141,9 +141,14 @@ function openProduct(handle) {
           ${euro(p.price)}
         </p>
 
-        <p style="color:#ccc;line-height:1.7">
-          ${p.description || "Création originale La Marque WM."}
-        </p>
+        <div class="wm-product-description">
+  <details class="wm-description-section">
+    <summary>Description et caractéristiques</summary>
+    <div class="wm-description-content" style="white-space:pre-line;color:#ccc;line-height:1.7">
+      ${p.description || "Création originale La Marque WM."}
+    </div>
+  </details>
+</div>
 
         <p>
           ${totalStock > 0
