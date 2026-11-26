@@ -102,3 +102,76 @@ footer{display:flex;justify-content:space-between;padding:28px 4vw;border-top:1p
   line-height: 1.8;
   white-space: pre-line;
 }
+/* Tableau des tailles WM */
+
+.wm-size-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+}
+
+.wm-size-table th,
+.wm-size-table td {
+  border: 1px solid #333;
+  padding: 10px 6px;
+}
+
+.wm-size-table th {
+  background: #222;
+  color: #fff;
+  font-weight: 600;
+}
+
+.wm-size-table td {
+  color: #ccc;
+}
+
+.wm-size-table tbody tr:nth-child(even) {
+  background: #191919;
+}
+
+.wm-size-table td:first-child {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Barre de défilement des fiches produits */
+
+dialog,
+dialog * {
+  scrollbar-width: thin;
+  scrollbar-color: #555 #151515;
+}
+
+dialog::-webkit-scrollbar,
+dialog *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+dialog::-webkit-scrollbar-track,
+dialog *::-webkit-scrollbar-track {
+  background: #151515;
+}
+
+dialog::-webkit-scrollbar-thumb,
+dialog *::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 6px;
+}
+
+/* Adaptation sur téléphone */
+
+@media (max-width: 600px) {
+  .wm-size-table {
+    font-size: 11px;
+  }
+
+  .wm-size-table th,
+  .wm-size-table td {
+    padding: 8px 3px;
+  }
+}
