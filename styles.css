@@ -175,3 +175,20 @@ dialog *::-webkit-scrollbar-thumb {
     padding: 8px 3px;
   }
 }
+/* Optimisation des espacements du guide des tailles WM */
+
+.wm-description-content:has(.wm-size-table) {
+  white-space: normal !important;
+}
+
+.wm-description-content:has(.wm-size-table) p {
+  margin: 0 0 12px;
+}
+
+.wm-description-content .wm-size-table {
+  margin: 12px 0;
+}
+
+.wm-description-content:has(.wm-size-table) p:last-child {
+  margin-bottom: 0;
+}
