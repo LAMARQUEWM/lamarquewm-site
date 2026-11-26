@@ -617,3 +617,142 @@ PRODUCTS.forEach(product => {
     product.gallery = photos.map(photo => "/" + photo);
   }
 });
+const EXPEDITION_WM = "Expédition des commandes sous 5 jours ouvrés. Une fois expédiées, elles mettent en général environ 3 à 4 jours pour arriver à destination.";
+
+const ENTRETIEN_WM = "Lavage en machine conformément aux instructions sur l'étiquette d'entretien.";
+
+const DESCRIPTION_TSHIRT_WM = "Le t-shirt est un essentiel polyvalent pour tous les styles. Sa coupe classique offre un confort optimal, tandis que le flocage sur l'avant ajoute une touche d'originalité. Que l'on souhaite un look décontracté ou plus habillé, ce t-shirt s'adapte parfaitement à toutes les occasions.";
+
+const TAILLES_TSHIRT_WM = "Disponibles en tailles XS à XL, nos t-shirts sont unisexes et suivent ces mesures de taille (largeur, longueur, et longueur des manches en cm) : XS (46,5, 66, 17), S (49, 68, 18), M (52, 70, 18,5), L (55, 70, 19), XL (59, 72, 20).\nPour les femmes, nous recommandons de prendre une taille en dessous de votre taille habituelle.";
+
+function descriptionTshirtWM(design, introduction = "", conclusion = true) {
+  return [
+    introduction,
+    DESCRIPTION_TSHIRT_WM,
+    conclusion ? "Ne manque pas l'opportunité de le porter fièrement !" : "",
+    "\nTaille et coupe :",
+    TAILLES_TSHIRT_WM,
+    "\nEntretien :",
+    ENTRETIEN_WM,
+    "\nÀ propos :",
+    "Matière principale : 100% coton prérétréci",
+    "Col ras de cou",
+    "Manches courtes",
+    "Bande de propreté au niveau du col",
+    "Finitions en bord-côte délicates",
+    "Design en vinyle" + (design ? " " + design : ""),
+    "Logo WM sur la nuque",
+    "\n*" + EXPEDITION_WM
+  ].filter(Boolean).join("\n");
+}
+
+const DESCRIPTIONS_WM = {
+  "sweat-a-capuche-sad-cloud": "Ce sweat à capuche est un véritable must-have pour les amateurs de style urbain. Avec le logo SAD CLOUD floqué sur l'avant, il affiche fièrement l'identité de notre marque. Sa capuche ajustable et sa coupe confortable en font un choix idéal pour rester à la fois tendance et décontracté.",
+
+  "bonnet": `Ajoutez une touche de style à votre garde-robe automnale et hivernale avec ce bonnet unique. Un incontournable pour affronter le froid avec style.
+
+Taille et coupe :
+Taille unique.
+
+Entretien :
+${ENTRETIEN_WM}
+
+À propos :
+Matière principale : 100% polyacrylique (toucher doux)
+Maille doublée
+Large revers
+Bande en coton avec logo WM
+Mixte
+
+*${EXPEDITION_WM}`,
+
+  "bonnet-a-pompon": `Bonnet mixte alliant style et confort. Un incontournable pour affronter le froid avec style. Avec son pompon et le logo de la marque WM brodé sur l'avant, il ajoute une touche de classe à n'importe quelle tenue.
+
+Taille et coupe :
+Taille unique.
+
+Entretien :
+${ENTRETIEN_WM}
+
+À propos :
+Matière principale : 100% polyacrylique (toucher doux)
+Maille doublée
+Bande en coton avec logo WM brodé
+Pompon bicolore
+
+*${EXPEDITION_WM}`,
+
+  "polo-wm": `Découvrez notre polo blanc intemporel, rehaussé d'un discret logo WM en noir brodé avec soin côté gauche. Élégant et polyvalent, ce polo incarne notre marque avec finesse et modernité, idéal pour un style raffiné au quotidien.
+
+Ce polo intemporel en piqué est le choix parfait pour un look élégant et décontracté. Avec son logo discret brodé sur l'avant, il ajoute une touche de style unique. Les manches courtes offrent un confort optimal, et la coupe classique assure un ajustement parfait.
+Ne manque pas l'occasion de te démarquer avec ce polo tendance !
+
+Taille et coupe :
+Le mannequin homme mesure 180cm et porte l'article en taille médium.
+Le mannequin femme mesure 166cm et porte l'article en taille XS.
+Ce produit est en taille mixte.
+Pour les femmes, nous recommandons de prendre une taille en dessous de votre taille habituelle.
+
+Entretien :
+${ENTRETIEN_WM}
+
+À propos :
+Piqué
+Matière principale : 100% coton
+Col polo
+Patte de boutonnage partielle
+Manches courtes
+
+*${EXPEDITION_WM}`,
+
+  "sweat-a-capuche-big-wm": `Ce sweat à capuche est un véritable must-have pour les amateurs de style urbain. Avec le logo WM floqué sur l'avant, il affiche fièrement l'identité de notre marque. Sa capuche ajustable et sa coupe confortable en font un choix idéal pour rester à la fois tendance et décontracté.
+
+Taille et coupe :
+Taille normalement. Prendre votre taille habituelle.
+
+Entretien :
+${ENTRETIEN_WM}
+
+À propos :
+Matière principale : 100% coton
+Sweat à capuche avec cordon plat et épais avec œillets
+Col et bord plus large
+Epaules droites
+Bande de propreté en chevrons
+Poche appliquée
+Accès MP3
+Emmanchures, poignets et base surfilés
+Coupe étroite
+
+*${EXPEDITION_WM}`,
+
+  "t-shirt-makichita": descriptionTshirtWM("MAKICHTA"),
+
+  "t-shirt-makichta": descriptionTshirtWM("MAKICHTA"),
+
+  "t-shirt-heart-break": descriptionTshirtWM("HEART BREAK"),
+
+  "t-shirt-sad-cloud": descriptionTshirtWM(
+    "SAD CLOUD",
+    "Exprimez votre originalité et vivez vos émotions avec SAD CLOUD.",
+    false
+  ),
+
+  "t-shirt-elephun": descriptionTshirtWM(
+    "ELEPHUN",
+    "Plongée dans la nature sous le soleil radieux, le t-shirt ELEPHUN rayonne d'engagement et de style.\nOrné d'un éléphant sans ses défenses, symbole de notre engagement pour la protection de la faune sauvage."
+  ),
+
+  "t-shirt-balhaine": descriptionTshirtWM(
+    "BALHAINE",
+    "Découvrez notre modèle iconique BALHAINE, symbole de notre engagement pour la préservation marine."
+  ),
+
+  "t-shirt-big-wm": descriptionTshirtWM("")
+};
+
+PRODUCTS.forEach(product => {
+  if (Object.prototype.hasOwnProperty.call(DESCRIPTIONS_WM, product.handle)) {
+    product.description = DESCRIPTIONS_WM[product.handle];
+  }
+});
