@@ -209,16 +209,66 @@ function openProduct(handle) {
                   sections[current] += text.replace(/^[^:]*:\s*/, "") + "\n";
                 });
 
-              return Object.entries(sections)
-                .filter(([title, content]) => content.trim())
-                .map(([title, content]) => `
-                  <details class="wm-description-section">
-                    <summary>${title}</summary>
-                    <div class="wm-description-content" style="white-space:pre-line">
-                      ${content.trim().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}
-                    </div>
-                  </details>
-                `).join("");
+              const escapeWM = text => text
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;");
+
+const formatSectionWM = (title, content) => {
+  const clean = escapeWM(content.trim());
+
+  if (title !== "Taille et coupe") return clean;
+
+  const pattern = /\b(XS|S|M|L|XL)\s*\((\d+(?:[.,]\d+)?),\s+(\d+(?:[.,]\d+)?),\s+(\d+(?:[.,]\d+)?)\)/g;
+
+  const sizes = [...content.matchAll(pattern)];
+
+  if (!sizes.length) return clean;
+
+  const first = sizes[0];
+  const last = sizes[sizes.length - 1];
+
+  const before = content.slice(0, first.index).trim();
+  const after = content.slice(last.index + last[0].length)
+    .replace(/^[.\s]+/, "").trim();
+
+  return `
+    <p>${escapeWM(before)}</p>
+    <table class="wm-size-table">
+      <thead>
+        <tr>
+          <th>Taille</th>
+          <th>Largeur</th>
+          <th>Longueur</th>
+          <th>Manches</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sizes.map(s => `
+          <tr>
+            <td>${s[1]}</td>
+            <td>${s[2]}</td>
+            <td>${s[3]}</td>
+            <td>${s[4]}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+    <p>Dimensions en centimètres.</p>
+    <p>${escapeWM(after)}</p>
+  `;
+};
+
+return Object.entries(sections)
+  .filter(([title, content]) => content.trim())
+  .map(([title, content]) => `
+    <details class="wm-description-section">
+      <summary>${title}</summary>
+      <div class="wm-description-content" style="white-space:pre-line">
+        ${formatSectionWM(title, content)}
+      </div>
+    </details>
+  `).join("");
             })()}
           </div>
       </div>
