@@ -141,14 +141,7 @@ function openProduct(handle) {
           ${euro(p.price)}
         </p>
 
-        <div class="wm-product-description">
-  <details class="wm-description-section">
-    <summary>Description et caractéristiques</summary>
-    <div class="wm-description-content" style="white-space:pre-line;color:#ccc;line-height:1.7">
-      ${p.description || "Création originale La Marque WM."}
-    </div>
-  </details>
-</div>
+        
 
         <p>
           ${totalStock > 0
@@ -181,6 +174,53 @@ function openProduct(handle) {
           data-handle="${p.handle}" disabled>
           AJOUTER AU PANIER
         </button>
+                  <div class="wm-product-description">
+            ${(() => {
+              const sections = {
+                "Description du produit": "",
+                "Taille et coupe": "",
+                "Composition et caractéristiques": "",
+                "Instructions d’entretien": "",
+                "Expédition et livraison": ""
+              };
+
+              let current = "Description du produit";
+
+              (p.description || "Création originale La Marque WM.")
+                .split(/\r?\n/)
+                .forEach(line => {
+                  const text = line.trim();
+
+                  if (/^Taille et coupe\s*:/i.test(text)) {
+                    current = "Taille et coupe";
+                  } else if (/^Entretien\s*:/i.test(text)) {
+                    current = "Instructions d’entretien";
+                  } else if (/^À propos\s*:/i.test(text)) {
+                    current = "Composition et caractéristiques";
+                  } else if (/^\*?\s*Expédition/i.test(text)) {
+                    current = "Expédition et livraison";
+                    sections[current] += line + "\n";
+                    return;
+                  } else {
+                    sections[current] += line + "\n";
+                    return;
+                  }
+
+                  sections[current] += text.replace(/^[^:]*:\s*/, "") + "\n";
+                });
+
+              return Object.entries(sections)
+                .filter(([title, content]) => content.trim())
+                .map(([title, content]) => `
+                  <details class="wm-description-section">
+                    <summary>${title}</summary>
+                    <div class="wm-description-content" style="white-space:pre-line">
+                      ${content.trim().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                    </div>
+                  </details>
+                `).join("");
+            })()}
+          </div>
       </div>
     </div>
   `;
